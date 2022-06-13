@@ -1,25 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ChakraProvider, Container } from "@chakra-ui/react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import People from "./pages/People";
+import Detail from "./pages/Detail";
+import NotFound from "./pages/NotFound";
+import Home from "./pages/Home";
+import usePeople from "./components/hooks/usePeople";
 
 function App() {
+  const { loading, people } = usePeople();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ChakraProvider>
+      <Container>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="people"
+              element={<People loading={loading} people={people} />}
+            />
+            <Route path="people/:id" element={<Detail people={people} />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </Container>
+    </ChakraProvider>
   );
 }
 
